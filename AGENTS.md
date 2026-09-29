@@ -141,6 +141,22 @@ dependencies and SDKs.
 Report checks that were blocked or not run and why; never imply they passed.
 Review the final diff for unrelated changes before finishing.
 
+## Cursor Cloud specific instructions
+
+- Node 24 (`.node-version`) and pnpm 10.33.4 (`packageManager`) are required.
+  The base image's `node` is 22 at `/exec-daemon/node`, which is ahead of
+  `/usr/local/bin` on `PATH`. The environment install links Node 24 and pnpm
+  from `/usr/local/cargo/bin`.
+- Run the local app with `pnpm dev:web`. Open http://localhost:1420. Vite binds
+  IPv6 localhost, so use `localhost` rather than `127.0.0.1`. The API listens on
+  `127.0.0.1:8088`. When `.env.web` is missing, setup copies `.env.web.example`
+  and generates `WF_SECRET_KEY`. Do not commit that file or print the key. Keep
+  `WF_LISTEN_ADDR=127.0.0.1:8088` so local use does not require a password.
+- Desktop development is `pnpm tauri dev`. GTK 3 and WebKitGTK 4.1 headers are
+  installed for that compile. A placeholder `dist/index.html` is enough for
+  `cargo check -p wealthfolio-app` before `pnpm build:tauri`.
+- Storage outbox tests need `CONNECT_API_URL=http://test.local`.
+
 ## Code review rules
 
 Challenge whether each new mechanism needs to exist, not only whether it works.
